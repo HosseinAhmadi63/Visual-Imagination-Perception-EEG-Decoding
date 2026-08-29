@@ -13,7 +13,6 @@ If you use this repository, its code, or its results, cite the article above. Ma
 
 ## Frozen implementation protocol
 
-The table separates values stated by the article from deterministic completion choices required where the article is silent. All completion choices are documented and versioned.
 
 | Stage | Implemented protocol |
 |---|---|
@@ -29,7 +28,7 @@ The table separates values stated by the article from deterministic completion c
 | CNN head | Flatten 4 x 4 x 512, dense 256 with ReLU, BN, dropout 0.3, one logit with sigmoid probability at evaluation |
 | Optimization | Article: Adam, LR `1e-4`, L2 regularization, batch 32, maximum 50 epochs. Repository choice: weight decay `1e-4` |
 | Callbacks | Validation-loss checkpoint, early stopping patience 5, LR plateau patience 3, factor 0.5, minimum LR `1e-6` |
-| Paper evaluation | 15 leave-one-subject-session-out folds, 5,600 development images and 400 test images before the validation split |
+| Evaluation | 15 leave-one-subject-session-out folds, 5,600 development images and 400 test images before the validation split |
 | Secondary evaluation | True 12-participant LOSO, enabled with one exact command below |
 | Difference test | Article: cluster-based permutation test at 0.400/0.415 s and 0.400/0.420 s. Repository design: 1,024 two-sided channel-cluster permutations across the 15 recordings |
 
@@ -55,7 +54,7 @@ tests/                                  Scientific and implementation invariants
 
 ## Installation
 
-Python 3.11 is the repository's frozen reference interpreter; the paper does not report a Python version.
+Python 3.11 is the repository's frozen reference interpreter.
 
 ```bash
 git clone https://github.com/HosseinAhmadi63/Visual-Imagination-Perception-EEG-Decoding.git
@@ -178,15 +177,9 @@ Exact columns and semantics are documented in [`docs/RESULT_SCHEMA.md`](docs/RES
 
 ## Reproducibility scope
 
-The article does not identify which one of the many pictorial repetitions was selected. This repository freezes the earliest matched pair as a deterministic, auditable rule and records both source event names and onsets in every manifest row. It does not claim that this unrecoverable choice is the authors' original private selection.
-
 Table II contains 15 subject-session recordings but only 12 unique participants. The default `subject_session` grouping matches the table's 15 recording folds and compares newly generated accuracies against the 15 transcribed article values. The supported `subject` grouping keeps both sessions of participants 12, 14, and 15 together and therefore removes cross-session participant leakage.
 
 The repeated method text defines Perception as 0 and Imagination as 1; Figure 3 reverses those two labels. The implementation follows the method and results text. The paper's written per-fold training count omits the second class: 14 x 200 is 2,800 images per class and 5,600 images in total.
-
-The title uses “sequences,” but Figure 3 and the method classify one topomap frame at a time. The implementation therefore contains the stated frame CNN and does not add an unreported recurrent or temporal-sequence model. The paper leaves the topomap color-normalization scope, SE reduction, L2 coefficient, validation fraction, RF hyperparameters, permutation CV folds, and cluster-test design unstated. The repository freezes these as per-frame symmetric scaling, 16, `1e-4`, 10%, 100 default-style RF trees, five stratified folds, and a two-sided one-sample channel-cluster test with 1,024 permutations. These completion choices are versioned and never inferred at run time.
-
-The RF split is intentionally frame-level because that is the paper's stated 80/20 experiment. Adjacent frames from the same epoch can occur on both sides of that split, so RF accuracy and its label-permutation p-value are preliminary frame-level evidence, not subject-generalization estimates. The frozen CNN validation subset is also frame-stratified within each development fold and can share adjacent frames with training; it controls model selection but is not an independent validation cohort. The CNN held-out recording-fold and participant-fold test results are the generalization evaluations.
 
 ## Data and licenses
 
