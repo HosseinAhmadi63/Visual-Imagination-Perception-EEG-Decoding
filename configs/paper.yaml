@@ -1,0 +1,154 @@
+project:
+  name: Visual-Imagination-Perception-EEG-Decoding
+  random_seed: 42
+  data_root: data/openneuro
+  epoch_root: data/epochs
+  topomap_root: data/topomaps
+  results_root: results
+  paper_source_root: results/publication/source
+  paper_generated_root: results/publication/generated
+
+dataset:
+  accession: ds004306
+  snapshot: 1.0.0
+  include: derivatives/preprocessed
+  object_manifest: data/openneuro_preprocessed_manifest.csv
+  trial_selection_reference: results/publication/source/deterministic_trial_selection.csv
+  expected_eeg_channels: 124
+  recordings:
+    - subject: 3
+      session: 3
+      subject_session: "3_3"
+    - subject: 8
+      session: 3
+      subject_session: "8_3"
+    - subject: 10
+      session: 1
+      subject_session: "10_1"
+    - subject: 11
+      session: 1
+      subject_session: "11_1"
+    - subject: 12
+      session: 1
+      subject_session: "12_1"
+    - subject: 12
+      session: 2
+      subject_session: "12_2"
+    - subject: 13
+      session: 1
+      subject_session: "13_1"
+    - subject: 14
+      session: 1
+      subject_session: "14_1"
+    - subject: 14
+      session: 2
+      subject_session: "14_2"
+    - subject: 15
+      session: 1
+      subject_session: "15_1"
+    - subject: 15
+      session: 2
+      subject_session: "15_2"
+    - subject: 16
+      session: 1
+      subject_session: "16_1"
+    - subject: 17
+      session: 1
+      subject_session: "17_1"
+    - subject: 18
+      session: 1
+      subject_session: "18_1"
+    - subject: 19
+      session: 1
+      subject_session: "19_1"
+
+tasks:
+  perception:
+    event_prefix: Perception_image_
+    label: 0
+    duration_seconds: 3.0
+    interval_seconds: 0.015
+    frames: 200
+  imagination:
+    event_prefix: Imagination_image_
+    label: 1
+    duration_seconds: 4.0
+    interval_seconds: 0.020
+    frames: 200
+
+topomaps:
+  image_size: 150
+  rgb_channels: 3
+  cmap: RdBu_r
+  contours: 6
+  sensors: true
+  interpolation_resolution: 150
+  image_interpolation: cubic
+  extrapolate: head
+  outlines: head
+  border: mean
+  color_scale: frame_symmetric
+  resize_interpolation: lanczos
+
+cnn:
+  filters: [32, 64, 128, 256, 512]
+  kernel_size: 3
+  convolution_padding: 1
+  convolution_dropout: 0.1
+  se_reduction: 16
+  dense_units: 256
+  dense_dropout: 0.3
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  batch_size: 32
+  max_epochs: 50
+  validation_fraction: 0.10
+  early_stopping_patience: 5
+  early_stopping_min_delta: 0.0
+  lr_plateau_patience: 3
+  lr_plateau_factor: 0.5
+  minimum_learning_rate: 0.000001
+  decision_threshold: 0.5
+  num_workers: 4
+  pin_memory: true
+  device: auto
+
+random_forest:
+  test_fraction: 0.20
+  stratified_split: true
+  n_estimators: 100
+  criterion: gini
+  max_depth: null
+  max_features: sqrt
+  min_samples_split: 2
+  bootstrap: true
+  n_jobs: -1
+  permutation_runs: 100
+  permutation_folds: 5
+  pca_components: 2
+  pca_solver: randomized
+  clusters: 2
+  clustering_linkage: ward
+
+statistics:
+  difference_times:
+    perception: [0.400, 0.415]
+    imagination: [0.400, 0.420]
+  cluster_permutations: 1024
+  cluster_alpha: 0.05
+  cluster_tail: 0
+
+evaluation:
+  paper_grouping: subject_session
+  strict_grouping: subject
+  aggregate_roc: concatenate_fold_predictions
+  metrics: [accuracy, precision, recall, f1, roc_auc]
+  positive_class: imagination
+
+publication:
+  title: Decoding Visual Imagination and Perception from EEG via Topomap Sequences
+  authors: [Hossein Ahmadi, Luca Mesin]
+  venue: 2025 47th Annual International Conference of the IEEE Engineering in Medicine and Biology Society
+  short_venue: EMBC 2025
+  doi: 10.1109/EMBC58623.2025.11251641
+  article_url: https://doi.org/10.1109/EMBC58623.2025.11251641

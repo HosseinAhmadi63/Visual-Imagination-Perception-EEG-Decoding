@@ -1,0 +1,5 @@
+class,precision,recall,f1_score,support
+Perception,0.99,0.75,0.85,600
+Imagination,0.79,0.99,0.89,600
+Macro Avg,0.89,0.87,0.87,1200
+Weighted Avg,0.89,0.87,0.87,1200

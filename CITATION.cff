@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: If you use this repository, its code, or its results, cite the paper below.
+title: Visual Imagination and Perception EEG Decoding
+type: software
+version: 1.0.0
+authors:
+  - family-names: Ahmadi
+    given-names: Hossein
+    email: hossein.ahmadi@polito.it
+  - family-names: Mesin
+    given-names: Luca
+repository-code: https://github.com/HosseinAhmadi63/Visual-Imagination-Perception-EEG-Decoding
+license: MIT
+preferred-citation:
+  type: conference-paper
+  title: Decoding Visual Imagination and Perception from EEG via Topomap Sequences
+  authors:
+    - family-names: Ahmadi
+      given-names: Hossein
+    - family-names: Mesin
+      given-names: Luca
+  collection-title: 2025 47th Annual International Conference of the IEEE Engineering in Medicine and Biology Society (EMBC)
+  year: 2025
+  doi: 10.1109/EMBC58623.2025.11251641

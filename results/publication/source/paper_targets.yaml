@@ -1,0 +1,15 @@
+random_forest:
+  accuracy: 0.873
+  roc_auc: 0.91
+  permutation_runs: 100
+  permutation_p_value: 0.0099
+  test_samples: 1200
+cnn:
+  mean_accuracy: 0.951
+  aggregate_roc_auc: 0.98
+  folds: 15
+clustering:
+  silhouette_score: 0.6750
+dataset:
+  topomap_images: 6000
+  images_per_recording_per_task: 200
