@@ -13,7 +13,7 @@ If you use this repository, its code, or its results, cite the article above. Ma
 
 ## Frozen implementation protocol
 
-The table separates values stated by the article from deterministic completion choices required where the article is silent. All completion choices are documented and versioned; they are not presented as recovered author settings.
+The table separates values stated by the article from deterministic completion choices required where the article is silent. All completion choices are documented and versioned.
 
 | Stage | Implemented protocol |
 |---|---|
