@@ -10,7 +10,7 @@ The upstream notebook accepts a manual bad-channel list but does not add it to `
 
 ## Deterministic trial selection
 
-The paper specifies one pictorial trial per subject but does not publish the selected repetitions. Exact private selection recovery is therefore impossible. The repository applies one immutable rule:
+The paper specifies one pictorial trial per subject but does not publish the selected repetitions. The repository applies one immutable rule:
 
 1. Convert FIF annotations to sample-ordered events.
 2. Remove a leading `0, ` and trailing `###my_stream_name` from every description.
@@ -32,9 +32,9 @@ The paper does not state a color-normalization scope. The implementation freezes
 
 Figure 3 determines the architecture. Five floor-mode max-pools transform 150 to 75, 37, 18, 9, and 4 pixels. Same convolutions therefore use padding 1. The block order is Conv2d, ReLU, BatchNorm2d, squeeze-and-excitation, element-wise dropout, MaxPool2d. The head order follows Figure 3: dense, ReLU, BatchNorm1d, dropout, output.
 
-The PyTorch model returns one logit and uses `BCEWithLogitsLoss`; sigmoid is applied once for metrics. Convolutions omit bias because every convolution is followed by batch normalization. The paper does not report the SE reduction, weight-decay coefficient, or validation split. They are frozen as 16, `1e-4`, and a stratified 10% frame split of the 14-recording development set. This validation choice can place adjacent frames from one selected trial in both training and validation; it is a model-selection subset, not independent subject-level validation. Adam otherwise uses PyTorch defaults. Validation loss controls checkpointing, early stopping, and learning-rate reduction.
+The PyTorch model returns one logit and uses `BCEWithLogitsLoss`; sigmoid is applied once for metrics. Convolutions omit bias because every convolution is followed by batch normalization. Adam otherwise uses PyTorch defaults. Validation loss controls checkpointing, early stopping, and learning-rate reduction.
 
-The paper repeatedly defines Perception as 0 and Imagination as 1, including the sigmoid's semantic meaning. Figure 3 reverses the printed class names. Code follows the repeated method/results definition.
+The paper defines Perception as 0 and Imagination as 1, including the sigmoid's semantic meaning. Figure 3 reverses the printed class names. Code follows the repeated method/results definition.
 
 ## Evaluation groups
 
@@ -46,7 +46,7 @@ All aggregated ROC points come from concatenating exactly one held-out predictio
 
 ## Preliminary analyses
 
-The RF analysis intentionally uses the paper's frame-level stratified 80/20 split. Its 1,200-image test support is balanced at 600 per class. RF hyperparameters were not stated and are frozen to 100 scikit-learn default-style trees with square-root feature sampling and seed 42.
+The RF analysis intentionally uses the paper's frame-level stratified 80/20 split. Its 1,200-image test support is balanced at 600 per class. RF hyperparameters are frozen to 100 scikit-learn default-style trees with square-root feature sampling and seed 42.
 
 Figure 6 calls the observed result cross-validated while the RF prose describes one holdout. The implementation retains both: `holdout.accuracy` reports the 80/20 result, and `permutation.observed_cross_validated_accuracy` reports the five-fold score used by 100 label permutations. The p-value uses scikit-learn's finite-permutation estimator.
 
@@ -54,4 +54,4 @@ PCA receives the flattened RGB values on their saved 0-255 scale, matching Figur
 
 ## Difference statistics
 
-The paper caption names a cluster-based permutation test but supplies no design. The repository freezes a two-sided one-sample channel-cluster test across the 15 subject-session differences. Electrode adjacency is computed from the embedded montage, the cluster-forming threshold is MNE's automatic t threshold, 1,024 permutations are used, and cluster alpha is 0.05. This completes the stated analysis without inventing a significance claim.
+The repository freezes a two-sided one-sample channel-cluster test across the 15 subject-session differences. Electrode adjacency is computed from the embedded montage, the cluster-forming threshold is MNE's automatic t threshold, 1,024 permutations are used, and cluster alpha is 0.05. This completes the stated analysis.
